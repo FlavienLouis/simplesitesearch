@@ -14,7 +14,7 @@ setup(
     description="Reptile Simple Site Search django app",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/reptiletech/simplesitesearch",
+    url="https://github.com/FlavienLouis/simplesitesearch",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",

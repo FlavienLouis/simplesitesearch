@@ -46,10 +46,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/reptiletech/simplesitesearch"
-Documentation = "https://github.com/reptiletech/simplesitesearch#readme"
-Repository = "https://github.com/reptiletech/simplesitesearch.git"
-"Bug Tracker" = "https://github.com/reptiletech/simplesitesearch/issues"
+Homepage = "https://github.com/FlavienLouis/simplesitesearch"
+Documentation = "https://github.com/FlavienLouis/simplesitesearch#readme"
+Repository = "https://github.com/FlavienLouis/simplesitesearch.git"
+"Bug Tracker" = "https://github.com/FlavienLouis/simplesitesearch/issues"
 
 [tool.setuptools]
 packages = ["simplesitesearch"]

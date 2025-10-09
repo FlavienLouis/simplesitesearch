@@ -192,7 +192,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For support and questions, please open an issue on the [GitHub repository](https://github.com/yourusername/simplesitesearch/issues).
+For support and questions, please open an issue on the [GitHub repository](https://github.com/FlavienLouis/simplesitesearch/issues).
 
 ## Changelog
 

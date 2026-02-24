@@ -100,9 +100,52 @@ The search results support pagination with a `page` parameter:
 /search/?q=your+search+term&page=2
 ```
 
+### Tags filter
+
+You can send a comma-separated list of tags to filter results. The `tag` (or `tags`) query parameter is forwarded to the API as `tags`:
+
+```
+/search/?q=your+search+term&tag=news,blog,tutorial
+```
+
+Pagination links preserve the tag filter.
+
 ### Honeypot Protection
 
 The search includes basic honeypot protection. If a `message` parameter is present, the search will not execute.
+
+## Utility functions (QOL)
+
+The app provides helpers in `simplesitesearch.utils` for use in views, management commands, or other code.
+
+| Function | Description |
+|----------|-------------|
+| **`get_search_results(term, current_page, tags=None)`** | Fetches search results from the API. Returns a dict with `total_hits` and `hits`. On error returns `{"total_hits": 0, "hits": []}`. |
+| **`get_search_api_url(term, current_page, tags=None)`** | Builds the full search API URL (uses Django settings and current language). |
+| **`build_search_query_string(term, page=1, tags=None)`** | Builds the query string for search URLs (e.g. pagination links), e.g. `?q=foo&page=2&tag=a,b`. |
+| **`parse_comma_separated_tags(value)`** | Parses a comma-separated string into a list of stripped tags; returns `[]` if value is falsy. |
+| **`normalize_search_term(term, max_words=10)`** | Trims and limits the search term to a maximum number of words. |
+| **`safe_int(value, default=None)`** | Safely converts a value to `int`; returns `default` on failure. |
+
+**Example — fetch results in code:**
+
+```python
+from simplesitesearch.utils import get_search_results
+
+data = get_search_results("django", current_page=1, tags=["cms", "tutorial"])
+total = data["total_hits"]
+results = data["hits"]
+```
+
+**Example — build search/pagination URLs:**
+
+```python
+from simplesitesearch.utils import build_search_query_string
+
+# Pagination link for page 2 with tag filter
+qs = build_search_query_string("my query", page=2, tags=["blog"])
+# => "?q=my+query&page=2&tag=blog"
+```
 
 ## Customization
 
@@ -195,6 +238,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions, please open an issue on the [GitHub repository](https://github.com/FlavienLouis/simplesitesearch/issues).
 
 ## Changelog
+
+### 0.0.3
+- Added `simplesitesearch.utils` QOL helpers: `get_search_results`, `get_search_api_url`, `build_search_query_string`, `parse_comma_separated_tags`, `normalize_search_term`, `safe_int`
+- Tag filter: `tag` (or `tags`) query parameter forwarded to API as comma-separated `tags`; pagination links preserve tags
+- README: Utility functions section and tags filter documentation
 
 ### 0.0.2
 - Fixed template include path in search_results.html

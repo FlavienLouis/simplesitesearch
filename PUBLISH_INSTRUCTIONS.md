@@ -8,18 +8,31 @@ This document provides step-by-step instructions for building and publishing the
 2. **pip** package manager
 3. **PyPI account** - Create one at https://pypi.org/account/register/
 
-## Step 1: Build the Package
+## Step 1: Version and Git (before building)
+
+1. Ensure version is set to the same value in:
+   - `simplesitesearch/__init__.py` (`__version__`)
+   - `setup.py` (`version=`)
+   - `pyproject.toml` (`version =` under `[project]`)
+2. Commit changes and tag the release:
+   ```bash
+   git add -A && git status
+   git commit -m "Release 0.0.3"
+   git tag v0.0.3
+   ```
+
+## Step 2: Build the Package
 
 ### Option A: Using the build script (Recommended)
 ```bash
-cd /Users/flavien/workspace/fr-site-search/simplesitesearch
+cd /path/to/simplesitesearch   # e.g. /Users/flavien/workspace/simplesitesearch
 chmod +x build_and_publish.sh
 ./build_and_publish.sh
 ```
 
 ### Option B: Manual build
 ```bash
-cd /Users/flavien/workspace/fr-site-search/simplesitesearch
+cd /path/to/simplesitesearch
 
 # Install build tools
 python3 -m pip install --upgrade build twine
@@ -30,11 +43,11 @@ rm -rf build/ dist/ *.egg-info/
 # Build the package
 python3 -m build
 
-# Test the package
-python3 -m pip install dist/simplesitesearch-0.0.2-py3-none-any.whl --force-reinstall
+# Test the package (replace 0.0.3 with current version if different)
+python3 -m pip install dist/simplesitesearch-0.0.3-py3-none-any.whl --force-reinstall
 ```
 
-## Step 2: Set up PyPI Authentication
+## Step 3: Set up PyPI Authentication
 
 ### Create API Token
 1. Go to https://pypi.org/manage/account/token/
@@ -53,7 +66,7 @@ password = pypi-your-api-token-here
 
 **Important**: Replace `pypi-your-api-token-here` with your actual token.
 
-## Step 3: Upload to PyPI
+## Step 4: Upload to PyPI
 
 ### Upload the package
 ```bash
@@ -62,10 +75,10 @@ twine upload dist/*
 
 ### Verify upload
 1. Go to https://pypi.org/project/simplesitesearch/
-2. Check that version 0.0.2 is listed
+2. Check that the new version (e.g. 0.0.3) is listed
 3. Test installation: `pip install simplesitesearch`
 
-## Step 4: Test Installation
+## Step 5: Test Installation
 
 ### Test from PyPI
 ```bash
@@ -83,7 +96,7 @@ python3 -c "import simplesitesearch; print(f'Version: {simplesitesearch.__versio
 ## Package Information
 
 - **Package Name**: `simplesitesearch`
-- **Version**: `0.0.2`
+- **Current version**: see `simplesitesearch/__init__.py` (e.g. 0.0.3)
 - **PyPI URL**: https://pypi.org/project/simplesitesearch/
 - **Installation**: `pip install simplesitesearch`
 
@@ -92,8 +105,8 @@ python3 -c "import simplesitesearch; print(f'Version: {simplesitesearch.__versio
 ### Common Issues
 
 1. **"Package already exists"**
-   - The package name `simplesitesearch` might already be taken
-   - Try a different name in `setup.py`, `setup.cfg`, and `pyproject.toml`
+   - You may be re-uploading the same version; bump the version and rebuild
+   - Or try a different name in `setup.py` and `pyproject.toml`
 
 2. **"Authentication failed"**
    - Check your API token in `~/.pypirc`
@@ -114,6 +127,7 @@ simplesitesearch/
 ├── simplesitesearch/
 │   ├── __init__.py
 │   ├── views.py
+│   ├── utils.py
 │   ├── urls.py
 │   ├── cms_apps.py
 │   └── templates/
@@ -121,9 +135,7 @@ simplesitesearch/
 │           ├── pagination.html
 │           └── search_results.html
 ├── setup.py
-├── setup.cfg
 ├── pyproject.toml
-├── MANIFEST.in
 ├── README.md
 └── LICENSE
 ```
@@ -132,10 +144,12 @@ simplesitesearch/
 
 For future updates:
 
-1. Update version in `setup.py`, `setup.cfg`, and `pyproject.toml`
-2. Update `simplesitesearch/__init__.py` version
-3. Rebuild: `python3 -m build`
-4. Upload: `twine upload dist/*`
+1. Bump version in `simplesitesearch/__init__.py`, `setup.py`, and `pyproject.toml` (same value in all three).
+2. Update the **Changelog** in `README.md`.
+3. Commit and tag: `git commit -m "Release X.Y.Z"` then `git tag vX.Y.Z`.
+4. Rebuild: `python3 -m build`
+5. Upload: `twine upload dist/*`
+6. Push to Git and publish tags: `git push origin main && git push origin --tags` (adjust `main` for your default branch)
 
 ## Support
 

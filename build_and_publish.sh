@@ -34,8 +34,8 @@ ls -la dist/
 
 echo ""
 echo "🧪 Testing package installation..."
-# Test installation in a temporary environment
-python3 -m pip install dist/simplesitesearch-0.0.2-py3-none-any.whl --force-reinstall
+# Test installation (use the built wheel; version matches setup.py / __init__.py)
+python3 -m pip install dist/simplesitesearch-*.whl --force-reinstall
 
 echo ""
 echo "✅ Package installation test successful!"

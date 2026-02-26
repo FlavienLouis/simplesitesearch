@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="simplesitesearch",
-    version="0.0.4",
+    version="0.0.5",
     author="Reptile Tech",
     author_email="flouis@reptile.tech",
     description="Reptile Simple Site Search django app",

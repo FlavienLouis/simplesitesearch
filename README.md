@@ -239,8 +239,11 @@ For support and questions, please open an issue on the [GitHub repository](https
 
 ## Changelog
 
-### 0.0.4
+### 0.0.5
 - **Fixed** tag parsing: single tag string (e.g. `Hometag`) no longer sent as `H,o,m,e,t,a,g`; string is treated as one tag. API URL keeps commas unencoded so multiple tags parse correctly.
+
+### 0.0.4
+- SSL verification configurable via `SITE_SEARCH_VERIFY_SSL` (default `True`).
 
 ### 0.0.3
 - Added `simplesitesearch.utils` QOL helpers: `get_search_results`, `get_search_api_url`, `build_search_query_string`, `parse_comma_separated_tags`, `normalize_search_term`, `safe_int`

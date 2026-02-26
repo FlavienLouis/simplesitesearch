@@ -147,7 +147,7 @@ def get_search_results(term, current_page, tags=None):
     """
     api_url = get_search_api_url(term, current_page, tags=tags)
     try:
-        response = requests.get(api_url, verify=False)
+        response = requests.get(api_url)
         return response.json()
     except Exception:
         return {"total_hits": 0, "hits": []}

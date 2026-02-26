@@ -35,11 +35,16 @@ def tags_to_query_value(tags):
     Convert a list of tags to a comma-separated string for query params or API.
 
     Args:
-        tags: Iterable of tag strings.
+        tags: Iterable of tag strings, or a single tag string (e.g. "Hometag").
+              A string is treated as one tag, not iterated by character.
 
     Returns:
         Comma-separated string, or None if tags is empty.
     """
+    if not tags:
+        return None
+    if isinstance(tags, str):
+        tags = [tags.strip()] if tags.strip() else []
     if not tags:
         return None
     return ",".join(str(t).strip() for t in tags if str(t).strip())
@@ -128,7 +133,8 @@ def get_search_api_url(term, current_page, tags=None):
     )
     tag_value = tags_to_query_value(tags)
     if tag_value:
-        url += "&tags=%s" % quote_plus(tag_value)
+        # Keep commas unencoded so the API can split tags (e.g. tags=Home,tag)
+        url += "&tags=%s" % quote_plus(tag_value, safe=",")
     return url
 
 

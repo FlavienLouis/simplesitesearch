@@ -114,6 +114,49 @@ Pagination links preserve the tag filter.
 
 The search includes basic honeypot protection. If a `message` parameter is present, the search will not execute.
 
+## Indexing authentication (optional)
+
+When crawling or indexing protected CMS content, enable opaque bearer-token auth so indexers can act as a configured Django user.
+
+### Settings
+
+```python
+SIMPLE_SITE_SEARCH_INDEXING_ENABLED = True
+SIMPLE_SITE_SEARCH_INDEXING_USER = "indexer"  # username, user id, or pk string
+SIMPLE_SITE_SEARCH_INDEXING_BOOTSTRAP_TOKEN = "your-long-random-secret"
+
+# Optional (defaults shown)
+SIMPLE_SITE_SEARCH_INDEXING_ACCESS_TTL = 3600       # seconds
+SIMPLE_SITE_SEARCH_INDEXING_REFRESH_TTL = 86400      # seconds
+SIMPLE_SITE_SEARCH_INDEXING_CACHE_PREFIX = "sss_idx"
+```
+
+Use a shared Django cache backend in multi-worker deployments so tokens are visible across processes.
+
+### Middleware
+
+Add after `AuthenticationMiddleware`:
+
+```python
+MIDDLEWARE = [
+    # ...
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "simplesitesearch.indexing_middleware.IndexingAccessTokenMiddleware",
+    # ...
+]
+```
+
+### Token endpoints
+
+Both endpoints are under the same URL prefix as search (e.g. `/search/` when included at `path('search/', include('simplesitesearch.urls'))`):
+
+| Endpoint | Auth header | Response |
+|----------|-------------|----------|
+| `POST …/internal/indexing/token/` | `Authorization: Bearer <bootstrap_token>` | `access_token`, `refresh_token`, `expires_in`, `refresh_expires_in` |
+| `POST …/internal/indexing/refresh/` | `Authorization: Bearer <refresh_token>` | New token pair (refresh rotation) |
+
+Send the access token on subsequent requests; the middleware logs in the configured user for that request.
+
 ## Utility functions (QOL)
 
 The app provides helpers in `simplesitesearch.utils` for use in views, management commands, or other code.
@@ -238,6 +281,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions, please open an issue on the [GitHub repository](https://github.com/FlavienLouis/simplesitesearch/issues).
 
 ## Changelog
+
+### 0.0.7
+- **Added** optional indexing authentication: bootstrap/refresh token endpoints, cache-backed opaque tokens, and `IndexingAccessTokenMiddleware` for indexer login via Bearer access tokens.
 
 ### 0.0.6
 - **Changed** search results: API hits normalized for templates (`display_title`, `snippet`, domain/type/language/tags/date metadata); highlighted title when available.

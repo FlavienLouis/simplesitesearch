@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7] - 2026-07-02
+
+### Added
+
+- **Indexing authentication**: Optional token-based auth for search indexers. Bootstrap token exchange at `POST …/internal/indexing/token/` returns access + refresh tokens; `POST …/internal/indexing/refresh/` rotates them. `IndexingAccessTokenMiddleware` logs in the configured indexer user when a valid access token is sent as `Authorization: Bearer …`.
+- **Settings**: `SIMPLE_SITE_SEARCH_INDEXING_ENABLED`, `SIMPLE_SITE_SEARCH_INDEXING_USER`, `SIMPLE_SITE_SEARCH_INDEXING_BOOTSTRAP_TOKEN`, plus optional TTL and cache-prefix overrides.
+
 ## [0.0.6] - 2026-07-02
 
 ### Changed

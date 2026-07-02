@@ -1,5 +1,6 @@
 from math import floor
 
+from django.utils.dateparse import parse_datetime
 from django.views.generic import TemplateView
 
 from .utils import (
@@ -59,6 +60,46 @@ def get_total_pages(total_hits):
     return pages_count
 
 
+def _optional_datetime(value):
+    if not value or not isinstance(value, str):
+        return None
+    return parse_datetime(value)
+
+
+def normalize_search_hit(hit):
+    """
+    Reduce each API hit to fields useful for templates (omit bulky nested blobs).
+    """
+    if not isinstance(hit, dict):
+        return hit
+
+    highlights = hit.get("highlights") or {}
+    title_highlight = None
+    title_snippets = highlights.get("title")
+    if title_snippets and isinstance(title_snippets, list) and title_snippets[0]:
+        title_highlight = title_snippets[0]
+
+    snippet = (
+        hit.get("highlight")
+        or hit.get("description")
+        or hit.get("content_preview")
+        or ""
+    )
+
+    modified_raw = hit.get("last_modified") or hit.get("indexed_at") or ""
+
+    return {
+        "url": hit.get("url") or "",
+        "display_title": title_highlight or hit.get("title") or "",
+        "snippet": snippet,
+        "domain": hit.get("domain") or "",
+        "type": hit.get("type") or "",
+        "tags": hit.get("tags") if isinstance(hit.get("tags"), list) else [],
+        "language": hit.get("language") or "",
+        "last_modified": _optional_datetime(modified_raw),
+    }
+
+
 def get_api_re_path(term, current_page, tags=None):
     """Build the search API URL (delegates to utils for consistency)."""
     return get_search_api_url(term, current_page, tags=tags)
@@ -84,21 +125,23 @@ class SearchResult(TemplateView):
             response_data = get_search_results(
                 term, current_page, tags=tags_list or None
             )
-            pages_count = get_total_pages(response_data["total_hits"])
+            total_hits = response_data.get("total_hits", 0)
+            pages_count = get_total_pages(total_hits)
             prev_page_number, next_page_number = get_prev_next_page_number(pages_count, current_page)
             prev_link, next_link = get_prev_next_links(
                 next_page_number, prev_page_number, term, tags=tags_list or None
             )
             page_links = get_page_links(pages_count, current_page, term, tags=tags_list or None)
 
+            raw_hits = response_data.get("hits") or []
             context.update({
                 "pages_count": pages_count,
                 "current_page": current_page,
-                "results_count": response_data["total_hits"],
+                "results_count": total_hits,
                 "prev_link": prev_link,
                 "next_link": next_link,
                 "page_links": page_links,
-                "results": response_data["hits"],
+                "results": [normalize_search_hit(h) for h in raw_hits],
             })
         else:
             context.update({"results": None})

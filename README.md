@@ -239,6 +239,10 @@ For support and questions, please open an issue on the [GitHub repository](https
 
 ## Changelog
 
+### 0.0.6
+- **Changed** search results: API hits normalized for templates (`display_title`, `snippet`, domain/type/language/tags/date metadata); highlighted title when available.
+- **Changed** templates: `{% load static %}` instead of deprecated `staticfiles` (Django 4+).
+
 ### 0.0.5
 - **Fixed** tag parsing: single tag string (e.g. `Hometag`) no longer sent as `H,o,m,e,t,a,g`; string is treated as one tag. API URL keeps commas unencoded so multiple tags parse correctly.
 

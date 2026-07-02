@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6] - 2026-07-02
+
+### Changed
+
+- **Search results**: API hits are normalized to a lean template payload (`display_title`, `snippet`, `domain`, `type`, `language`, `tags`, `last_modified`) instead of passing the full API response (highlights blob, headings, score, etc.). Title uses highlighted text when available; snippet falls back from `highlight` → `description` → `content_preview`.
+- **Templates**: Replaced deprecated `{% load staticfiles %}` with `{% load static %}` for Django 4+ compatibility.
+
 ## [0.0.5] - 2025-02-26
 
 ### Fixed

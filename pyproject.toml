@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "simplesitesearch"
-version = "0.0.7"
+version = "0.0.8"
 description = "Reptile Simple Site Search django app"
 readme = "README.md"
 license = {text = "MIT"}

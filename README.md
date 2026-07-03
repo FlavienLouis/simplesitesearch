@@ -282,6 +282,9 @@ For support and questions, please open an issue on the [GitHub repository](https
 
 ## Changelog
 
+### 0.0.8
+- **Fixed** pagination template: `{% ifequal %}` replaced with `{% if page_link.page == current_page %}` (Django 4.1+).
+
 ### 0.0.7
 - **Added** optional indexing authentication: bootstrap/refresh token endpoints, cache-backed opaque tokens, and `IndexingAccessTokenMiddleware` for indexer login via Bearer access tokens.
 

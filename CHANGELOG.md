@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.0.8] - 2026-07-03
+
+### Fixed
+
+- **Pagination template**: Replaced deprecated `{% ifequal %}` / `{% endifequal %}` with `{% if %}…{% endif %}` for Django 4.1+ compatibility (removed tags).
+
 ## [0.0.7] - 2026-07-02
 
 ### Added

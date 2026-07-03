@@ -25,31 +25,16 @@
     <section class="section">
         <div class="search__content">
             {% for result in results %}
+            {% comment %} {{result}} {% endcomment %}
             <div class="search__content__result">
                 <div class="headings__third-container">
-                    <a class="headings headings__third headings--blue" href="{{ result.url }}">{{ result.display_title|safe }}</a>
+                    <a class="headings headings__third headings--blue" href="{{result.url}}">{{ result.display_title|safe }}</a>
                 </div>
-                {% if result.snippet %}
                 <div class="text-container">
                     <div class="text text--graydark">
-                        <p>{{ result.snippet|safe }}…</p>
+                        <p>{{result.snippet|safe}}</p>
                     </div>
                 </div>
-                {% endif %}
-                {% if result.domain or result.type or result.language or result.last_modified %}
-                <div class="text-container">
-                    <div class="text text--graydark">
-                        <p>{% if result.domain %}{{ result.domain }}{% endif %}{% if result.type %}{% if result.domain %} · {% endif %}{{ result.type }}{% endif %}{% if result.language %}{% if result.domain or result.type %} · {% endif %}{{ result.language }}{% endif %}{% if result.last_modified %}{% if result.domain or result.type or result.language %} · {% endif %}{{ result.last_modified|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</p>
-                    </div>
-                </div>
-                {% endif %}
-                {% if result.tags %}
-                <div class="text-container">
-                    <div class="text text--graydark">
-                        <p>{% for t in result.tags %}{{ t }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-                    </div>
-                </div>
-                {% endif %}
             </div>
             {% empty %}
             <div class="search__content--empty">

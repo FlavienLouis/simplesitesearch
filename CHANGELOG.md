@@ -5,6 +5,7 @@
 ### Fixed
 
 - **Pagination template**: Replaced deprecated `{% ifequal %}` / `{% endifequal %}` with `{% if %}…{% endif %}` for Django 4.1+ compatibility (removed tags).
+- **Search results template**: Simplified default `search_results.html` to display title and snippet only, matching the normalized API payload from 0.0.6.
 
 ## [0.0.7] - 2026-07-02
 
